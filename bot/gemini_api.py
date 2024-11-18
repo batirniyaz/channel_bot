@@ -2,6 +2,7 @@ import json
 
 import google.generativeai as genai
 from config import GEMINI_API
+from bot import message
 
 genai.configure(api_key=GEMINI_API)
 
@@ -22,11 +23,7 @@ chat_session = model.start_chat(
   history=[
     {
       "role": "user",
-      "parts": [
-        "You are an admin in a Telegram Channel. The channel is about programming(python) and your task is to post "
-        "some kind of content. Below will be the topic. Write the post in casual style. NOTE: write your text in "
-        "markdown mode( with markdown tegs where text should be bold or something else)"
-      ],
+      "parts": [message.prompt],
     },
   ]
 )
@@ -36,7 +33,17 @@ def generate(text):
     response = chat_session.send_message(text)
     response_data = json.loads(response.text)
     title = response_data.get("title", "No title")
-    content = response_data.get("content", "No content")
-    formatted_response = f"Title: {title}\n\n{content}"
+    content = ''
+
+    if 'main_text' in response_data:
+        content = response_data.get("main_text", "No main_text")
+    elif 'body' in response_data:
+        content = response_data.get("body", "No body")
+    elif 'content' in response_data:
+        content = response_data.get("content", "No content")
+
+    formatted_response = f"{title}\n\n{content}"
+    print(response.text)
+    print(response_data)
     return formatted_response
 
