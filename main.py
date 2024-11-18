@@ -3,4 +3,4 @@ import bot.handlers
 
 if __name__ == "__main__":
     print('Bot is running...')
-    main_bot.infinity_polling()
+    main_bot.infinity_polling(skip_pending=True)
