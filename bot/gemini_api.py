@@ -43,7 +43,5 @@ def generate(text):
         content = response_data.get("content", "No content")
 
     formatted_response = f"{title}\n\n{content}"
-    print(response.text)
-    print(response_data)
     return formatted_response
 
